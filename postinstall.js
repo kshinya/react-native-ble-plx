@@ -28,7 +28,7 @@ if (process.platform === 'darwin' && shouldUseCarthage()) {
     errorExitProcess(`${bleClientManagerDirectory} directory not found. Cannot proceed with building the library.`)
   }
 
-  spawnSyncProcessAndExitOnError('carthage', ['bootstrap', ...platformParams])
+  spawnSyncProcessAndExitOnError('carthage', ['bootstrap', '--no-use-binaries' , ...platformParams])
 
   const carthageVersionString = carthageVersionProcessResult.output[1].toString()
   spawnSyncProcessAndExitOnError('carthage', getCarthageBuildParams(carthageVersionString))
@@ -63,10 +63,10 @@ function getCarthageBuildParams(carthageVersionString) {
   const majorMinorPatch = carthageVersionString.split('.')
   const major = parseInt(majorMinorPatch[0])
   const minor = parseInt(majorMinorPatch[1])
-  const buildParams = ['build', '--no-skip-current', ...platformParams]
+  const buildParams = ['build', '--no-use-binaries' ,'--no-skip-current', ...platformParams]
   if (major > 0 || minor > 20) {
     // --cache-builds should be available (unless version 1.x.x will remove it)
-    buildParams.push('--cache-builds')
+//    buildParams.push('--cache-builds')
   }
   return buildParams
 }
